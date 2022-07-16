@@ -4,7 +4,7 @@ simple to use library to add event handler to certain actions on page and add an
 ## Usage
 call  
 ```js
-new EventHandler(selector, options)
+new EventHandler(selector [, options])
 ```  
 
 selector could be either  
