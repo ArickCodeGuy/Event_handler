@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event handler</title>
+</head>
+<body>
+    <div class="scroll-block">
+        <div class="heading">Accordions</div>
+        <div class="accordion">
+            <div class="accordion__title">accordion title</div>
+            <div class="accordion__body" style="display: none;">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus temporibus atque dignissimos culpa tempore, officiis. Est aspernatur repudiandae laborum maxime deleniti eligendi quos ad dolores facere iure officia temporibus dignissimos tempora quam, officiis doloremque quibusdam consequuntur sunt libero odio veritatis expedita praesentium, atque tempore culpa! Qui dolorum praesentium obcaecati soluta blanditiis ut, similique expedita inventore temporibus magni, omnis molestiae eos aut quo repellendus minima explicabo, dicta officia, laudantium itaque sequi! Ea necessitatibus aspernatur, impedit eligendi totam obcaecati adipisci iste! Error, sequi quae repellendus ipsam? Ut quod cum consequatur illo totam eum odit deleniti minima debitis, saepe similique, accusamus nam animi?
+            </div>
+        </div>
+        <div class="accordion">
+            <div class="accordion__title">accordion title</div>
+            <div class="accordion__body" style="display: none;">
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus temporibus atque dignissimos culpa tempore, officiis. Est aspernatur repudiandae laborum maxime deleniti eligendi quos ad dolores facere iure officia temporibus dignissimos tempora quam, officiis doloremque quibusdam consequuntur sunt libero odio veritatis expedita praesentium, atque tempore culpa! Qui dolorum praesentium obcaecati soluta blanditiis ut, similique expedita inventore temporibus magni, omnis molestiae eos aut quo repellendus minima explicabo, dicta officia, laudantium itaque sequi! Ea necessitatibus aspernatur, impedit eligendi totam obcaecati adipisci iste! Error, sequi quae repellendus ipsam? Ut quod cum consequatur illo totam eum odit deleniti minima debitis, saepe similique, accusamus nam animi?
+            </div>
+        </div>
+    </div>
+    <div class="scroll-block">
+        <div class="heading">Burger</div>
+        <div class="burger">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div class="scroll-block">
+        <div class="heading">Popups</div>
+        <button class="btn popup-opener" data-target="#popup-1">open popup #popup-1</button>
+    </div>
+    </div>
+    <div class="scroll-block">
+        <div class="heading">Scroll animation</div>
+        <p>All in one library</p>
+        <p>Uses vanila js</p>
+    </div>
+    <div class="menu" style="display: none;">
+        <div class="menu__content">menu content</div>
+    </div>
+    <div class="popup" id="popup-1" data-target="self" style="display: none;">
+        <div class="popup__content">content</div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        new EventHandler('.accordion__title', {
+            parent: '.accordion',
+            target_selector: '.accordion__body'
+        })
+
+        new EventHandler('.popup-opener, .popup')
+        document.querySelectorAll('.popup__content').forEach(el => {
+            el.addEventListener('click', e => e.stopPropagation())
+        })
+
+        new EventHandler('.burger, .menu', {
+            target_selector: '.menu',
+            animation: {
+                prefix: 'menu-',
+                function: classAnimation,
+            }
+        })
+        document.querySelectorAll('.menu__content').forEach(el => {
+            el.addEventListener('click', e => e.stopPropagation())
+        })
+
+        new EventHandler(window, {
+            target_selector: '.scroll-block',
+            animation: {
+                function: scrollAnimation,
+                event: 'scroll',
+                prefix: 'scroll-',
+                prevent_overlap: false,
+                fire_on_init: true,
+                hideBlock: false
+            }
+        })
+    </script>
+    <style>
+        body {
+            font-family: 'Arial';
+            margin: 0;
+        }
+        * {
+            box-sizing: border-box;
+        }
+        .burger {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            border: 1px solid black;
+            cursor: pointer;
+        }
+        .burger span {
+            position: absolute;
+            display: block;
+            width: 80%;
+            height: 3px;
+            top: 25%;
+            left: 50%;
+            border-radius: 3px;
+            background-color: black;
+            transform: translateX(-50%);
+        }
+        .burger span:nth-child(2) {
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .burger span:nth-child(3) {
+            top: 75%;
+            transform: translate(-50%, -100%);
+        }
+        .menu {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.8);
+        }
+        .menu.menu-leave-to,
+        .menu.menu-enter-from {
+            opacity: 0;
+        }
+        .menu__content {
+            position: absolute;
+            padding: 10px;
+            left: 0;
+            background-color: #fff;
+            width: 300px;
+            max-width: 90%;
+            height: 100vh;
+            transition-duration: inherit;
+        }
+        .menu.menu-leave-to .menu__content,
+        .menu.menu-enter-from .menu__content {
+            transform: translateX(-100%);
+        }
+        .accordion {
+            width: 100%;
+        }
+        .accordion__title {
+            padding: 10px;
+            background-color: lightgrey;
+            cursor: pointer;
+        }
+        .accordion__body {
+            padding: 10px;
+            background-color: #f0f0f0;
+        }
+        .popup {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .popup__content {
+            background-color: #fff;
+            padding: 10px;
+        }
+        .btn {
+            font-size: 2em;
+            background-color: blue;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 0;
+            cursor: pointer;
+        }
+        .scroll-block {
+            height: 100vh;
+            opacity: 0;
+            transition: .3s;
+            background: lightgreen;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+        .scroll-block:nth-child(5n) {background: }
+        .scroll-block:nth-child(5n + 1) {background: lightblue}
+        .scroll-block:nth-child(5n + 2) {background: orange}
+        .scroll-block:nth-child(5n + 3) {background: purple}
+        .scroll-block.scroll-shown {
+            opacity: 1
+        }
+        .heading {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 1em;
+        }
+        .heading:last-child {
+            margin-bottom: 0;
+        }
+    </style>
+</body>
+</html>
